@@ -47,7 +47,11 @@ public class EnvironmentGenerate : MonoBehaviour
     [SerializeField] private float _bottom = 10f;
     [SerializeField, Range(0f, 1f)] private float _curveSmoothness = 0.5f;
     private Vector3 _lastPos;
-    private void OnValidate()
+    private BoxCollider2D _boxCollider;
+
+
+    //WITHOUT BOX COLLIDER ADJUSTMENT
+    /*private void OnValidate()
     {
         _spriteShapeController.spline.Clear();
 
@@ -67,5 +71,38 @@ public class EnvironmentGenerate : MonoBehaviour
 
         _spriteShapeController.spline.InsertPointAt(_levelLength, new Vector3(_lastPos.x, transform.position.y - _bottom));
         _spriteShapeController.spline.InsertPointAt(_levelLength + 1, new Vector3(transform.position.x, transform.position.y - _bottom));
+    }*/
+
+    //WITH BOX COLLIDER ADJUSTMENT AUTOMATICALLY
+    private void OnValidate()
+    {
+        if (_spriteShapeController == null)
+            return;
+
+        _spriteShapeController.spline.Clear();
+
+        for (int i = 0; i < _levelLength; i++)
+        {
+            _lastPos = transform.position + new Vector3(i * _xMultiplier, _flatY, 0f);
+            _spriteShapeController.spline.InsertPointAt(i, _lastPos);
+
+            if (i != 0 && i != _levelLength - 1)
+            {
+                _spriteShapeController.spline.SetTangentMode(i, ShapeTangentMode.Continuous);
+                _spriteShapeController.spline.SetLeftTangent(i, Vector3.left * _xMultiplier * _curveSmoothness);
+                _spriteShapeController.spline.SetRightTangent(i, Vector3.right * _xMultiplier * _curveSmoothness);
+            }
+        }
+
+        _spriteShapeController.spline.InsertPointAt(_levelLength, new Vector3(_lastPos.x, transform.position.y - _bottom));
+        _spriteShapeController.spline.InsertPointAt(_levelLength + 1, new Vector3(transform.position.x, transform.position.y - _bottom));
+
+        // Adjust the Box Collider 2D size based on the level length and x multiplier
+        if (_boxCollider == null)
+            _boxCollider = GetComponent<BoxCollider2D>();
+
+        float colliderWidth = (_levelLength - 1) * _xMultiplier;
+        _boxCollider.size = new Vector2(colliderWidth, 0.25f);
+        _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y); // Adjust the Y offset to cover only the top part
     }
 }
