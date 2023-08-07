@@ -39,6 +39,11 @@ public class EnvironmentGenerate : MonoBehaviour
      }*/
 
 
+    [Header("Prefab Placement")]
+    [SerializeField] private GameObject prefabToInstantiate;
+    [SerializeField] private int numberOfPrefabs = 5; 
+    [SerializeField] private float spacingBetweenPrefabs = 500f; 
+
     //FLAT TERRAIN
     [SerializeField] private SpriteShapeController _spriteShapeController;
     [SerializeField, Range(3f, 102f)] private int _levelLength = 50;
@@ -103,6 +108,30 @@ public class EnvironmentGenerate : MonoBehaviour
 
         float colliderWidth = (_levelLength - 1) * _xMultiplier;
         _boxCollider.size = new Vector2(colliderWidth, 0.1f);
-        _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y); // Adjust the Y offset to cover only the top part
+        _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y);
+
+
+        //PREFABS
+        List<Vector3> prefabPositions = new List<Vector3>();
+
+        float yScale = 1.25f; 
+        float yOffset =0.95f; 
+        for (int i = 0; i < numberOfPrefabs; i++)
+        {
+            float normalizedPosition = (float)i / (numberOfPrefabs - 1); 
+            float xPos = normalizedPosition * (_levelLength - 1) * _xMultiplier; 
+
+            xPos = Mathf.Clamp(xPos, 0f, (_levelLength - 1) * _xMultiplier);
+
+            Vector3 prefabPosition = transform.position + new Vector3(xPos, _flatY + yOffset, 0f); 
+            prefabPositions.Add(prefabPosition);
+        }
+
+        foreach (Vector3 position in prefabPositions)
+        {
+            GameObject instantiatedPrefab = Instantiate(prefabToInstantiate, position, Quaternion.identity);
+            instantiatedPrefab.transform.localScale = new Vector3(1.25f, yScale, 1.0f); 
+        }
+
     }
 }
