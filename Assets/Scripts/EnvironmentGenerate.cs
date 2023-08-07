@@ -121,7 +121,7 @@ public class EnvironmentGenerate : MonoBehaviour
             float normalizedPosition = (float)i / (numberOfPrefabs - 1); 
             float xPos = normalizedPosition * (_levelLength - 1) * _xMultiplier; 
 
-            xPos = Mathf.Clamp(xPos, 0f, (_levelLength - 1) * _xMultiplier);
+            xPos = Mathf.Clamp(xPos, 0f, (_levelLength - 10) * _xMultiplier);
 
             Vector3 prefabPosition = transform.position + new Vector3(xPos, _flatY + yOffset, 0f); 
             prefabPositions.Add(prefabPosition);
