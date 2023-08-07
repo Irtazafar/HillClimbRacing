@@ -102,7 +102,7 @@ public class EnvironmentGenerate : MonoBehaviour
             _boxCollider = GetComponent<BoxCollider2D>();
 
         float colliderWidth = (_levelLength - 1) * _xMultiplier;
-        _boxCollider.size = new Vector2(colliderWidth, 0.25f);
+        _boxCollider.size = new Vector2(colliderWidth, 0.1f);
         _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y); // Adjust the Y offset to cover only the top part
     }
 }
