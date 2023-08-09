@@ -24,6 +24,12 @@ public class DistanceCalculate : MonoBehaviour
        
     }
 
+    public Transform PlayerPos
+    {
+        get { return _playerPos; }
+        set { _playerPos = value; }
+    }
+
     private void Update()
     {
         Vector2 distance = (Vector2)_playerPos.position - _startPos;
