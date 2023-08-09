@@ -51,8 +51,12 @@ public class FuelController : MonoBehaviour
             fuelAnimation.SetActive(true);
             if (_currentFuelAmount <= 0f)
             {
+                fuelAnimation.SetActive(false);
                 GameManager.instance.GameOver();
             }
+        }else
+        {
+            fuelAnimation.SetActive(false);
         }
         
     }
