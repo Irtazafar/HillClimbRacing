@@ -10,6 +10,9 @@ public class FuelController : MonoBehaviour
     public static FuelController instance;
 
     [SerializeField]
+    GameObject fuelAnimation;
+
+    [SerializeField]
     private Image _fuelImage;
 
     [SerializeField, Range(0.1f, 5f)]
@@ -43,10 +46,15 @@ public class FuelController : MonoBehaviour
     {
         _currentFuelAmount -= Time.deltaTime * _fuelDrainSpeed;
         UpdateUI();
-        if(_currentFuelAmount<=0f)
+        if(_currentFuelAmount<30f)
         {
-            GameManager.instance.GameOver();
+            fuelAnimation.SetActive(true);
+            if (_currentFuelAmount <= 0f)
+            {
+                GameManager.instance.GameOver();
+            }
         }
+        
     }
 
     private void UpdateUI()
