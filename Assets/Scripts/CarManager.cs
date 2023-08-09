@@ -72,7 +72,7 @@ public class CarManager : MonoBehaviour
         if (carPrefabs.Length > 0 && carPrefabs[0] != null)
         {
           
-            currentCar = Instantiate(carPrefabs[2], position, Quaternion.identity);
+            currentCar = Instantiate(carPrefabs[0], position, Quaternion.identity);
             currentCar.transform.localScale = scale;
             virtualCamera.Follow = currentCar.transform;
             distanceCalculator.PlayerPos = currentCar.transform;
