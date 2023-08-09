@@ -64,6 +64,8 @@ public class DriveCar : MonoBehaviour
     [SerializeField]
     private float _rotationSpeed = 300f;
 
+    [SerializeField] private AudioSource accelerationSound;
+
     private float _moveInput;
 
     private void FixedUpdate()
@@ -74,19 +76,22 @@ public class DriveCar : MonoBehaviour
 
     public void ApplyBrake()
     {
-       // Debug.Log("Applying Brake");
+        accelerationSound.Play();
+        // Debug.Log("Applying Brake");
         _moveInput = -1f;
         ApplyTorque(_brakeSpeed);
     }
 
     public void ReleaseBrake()
     {
+        accelerationSound.Stop();
         _moveInput = 0f;
         ApplyTorque(0f);
     }
 
     public void ApplyRace()
     {
+        accelerationSound.Play();
         _moveInput = 1f;
         //Debug.Log("Applying Race");
         ApplyTorque(_speed);
@@ -94,6 +99,7 @@ public class DriveCar : MonoBehaviour
 
     public void ReleaseRace()
     {
+        accelerationSound.Stop();
         _moveInput = 0f;
         ApplyTorque(0f);
     }
