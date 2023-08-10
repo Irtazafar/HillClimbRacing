@@ -111,7 +111,7 @@ public class EnvironmentGenerate : MonoBehaviour
         _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y);
 
 
-        //PREFABS
+        /*//PREFABS
         List<Vector3> prefabPositions = new List<Vector3>();
 
         float yScale = 1.25f; 
@@ -131,7 +131,7 @@ public class EnvironmentGenerate : MonoBehaviour
         {
             GameObject instantiatedPrefab = Instantiate(prefabToInstantiate, position, Quaternion.identity);
             instantiatedPrefab.transform.localScale = new Vector3(1.25f, yScale, 1.0f); 
-        }
+        }*/
 
     }
 }
