@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.U2D;
 
-[ExecuteInEditMode]
+//[ExecuteInEditMode]
 public class EnvironmentGenerate : MonoBehaviour
 {
 
@@ -55,6 +55,30 @@ public class EnvironmentGenerate : MonoBehaviour
     private BoxCollider2D _boxCollider;
 
 
+    private void Start()
+    {
+        //PREFABS
+        List<Vector3> prefabPositions = new List<Vector3>();
+
+        float yScale = 1.25f;
+        float yOffset = 0.95f;
+        for (int i = 0; i < numberOfPrefabs; i++)
+        {
+            float normalizedPosition = (float)i / (numberOfPrefabs - 1);
+            float xPos = normalizedPosition * (_levelLength - 10) * _xMultiplier;
+
+            xPos = Mathf.Clamp(xPos, 10f, (_levelLength - 10) * _xMultiplier);
+
+            Vector3 prefabPosition = transform.position + new Vector3(xPos, _flatY + yOffset, 0f);
+            prefabPositions.Add(prefabPosition);
+        }
+
+        foreach (Vector3 position in prefabPositions)
+        {
+            GameObject instantiatedPrefab = Instantiate(prefabToInstantiate, position, Quaternion.identity);
+            instantiatedPrefab.transform.localScale = new Vector3(1.25f, yScale, 1.0f);
+        }
+    }
     //WITHOUT BOX COLLIDER ADJUSTMENT
     /*private void OnValidate()
     {
@@ -109,29 +133,7 @@ public class EnvironmentGenerate : MonoBehaviour
         float colliderWidth = (_levelLength - 1) * _xMultiplier;
         _boxCollider.size = new Vector2(colliderWidth, 0.1f);
         _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y);
-
-
-        /*//PREFABS
-        List<Vector3> prefabPositions = new List<Vector3>();
-
-        float yScale = 1.25f; 
-        float yOffset =0.95f; 
-        for (int i = 0; i < numberOfPrefabs; i++)
-        {
-            float normalizedPosition = (float)i / (numberOfPrefabs - 1); 
-            float xPos = normalizedPosition * (_levelLength - 1) * _xMultiplier; 
-
-            xPos = Mathf.Clamp(xPos, 0f, (_levelLength - 10) * _xMultiplier);
-
-            Vector3 prefabPosition = transform.position + new Vector3(xPos, _flatY + yOffset, 0f); 
-            prefabPositions.Add(prefabPosition);
         }
 
-        foreach (Vector3 position in prefabPositions)
-        {
-            GameObject instantiatedPrefab = Instantiate(prefabToInstantiate, position, Quaternion.identity);
-            instantiatedPrefab.transform.localScale = new Vector3(1.25f, yScale, 1.0f); 
-        }*/
 
-    }
 }
