@@ -7,6 +7,7 @@ using UnityEngine.U2D;
 public class EnvironmentGenerate : MonoBehaviour
 {
 
+    #region Curved Terrain
     /* [SerializeField] private SpriteShapeController _spriteShapeController;
      [SerializeField, Range(3f, 100f)] private int _levelLength = 50;
      [SerializeField, Range(1f, 50f)] private float _xMultipler = 2f;
@@ -37,14 +38,27 @@ public class EnvironmentGenerate : MonoBehaviour
          _spriteShapeController.spline.InsertPointAt(_levelLength, new Vector3(_lastPos.x, transform.position.y - _bottom));
          _spriteShapeController.spline.InsertPointAt(_levelLength + 1, new Vector3(transform.position.x, transform.position.y - _bottom));
      }*/
+    #endregion
 
-
-    [Header("Prefab Placement")]
+    [Header("Fuel Placement")]
     [SerializeField] private GameObject prefabToInstantiate;
     [SerializeField] private int numberOfPrefabs = 5; 
-    [SerializeField] private float spacingBetweenPrefabs = 500f; 
+    [SerializeField] private float spacingBetweenPrefabs = 500f;
+    //[SerializeField] private Transform FuelParent;
+
+    [Header("Coins Placement")]
+    [SerializeField] private GameObject _fiveCoint;
+    [SerializeField] private GameObject _twentyFiveCoint;
+    [SerializeField] private GameObject _hundredCoint;
+    [SerializeField] private GameObject _fiveHundredCoint;
+    [SerializeField, Range(3f, 100f)] private int numberofCoins = 5;
+    //[SerializeField, Range(3f, 100f)] private int coinSpacing = 5;
+    //[SerializeField, Range(3f, 100f)] private int spacingBetweenCoins = 5;
+
+    //[SerializeField] private Transform coinParent;
 
     //FLAT TERRAIN
+    [Header("Flat Terrain")]
     [SerializeField] private SpriteShapeController _spriteShapeController;
     [SerializeField, Range(3f, 102f)] private int _levelLength = 50;
     [SerializeField, Range(1f, 50f)] private float _xMultiplier = 2f;
@@ -57,7 +71,73 @@ public class EnvironmentGenerate : MonoBehaviour
 
     private void Start()
     {
-        //PREFABS
+        //Fuel Placement 
+        GenerateFuelPlacements();
+
+        //Coins Placement
+        CoinsPlacement();
+
+    }
+
+
+    private void CoinsPlacement()
+    {
+        List<Vector3> coinBatchPositions = new List<Vector3>();
+
+        float yScale = 1.0f; // Adjust the yScale as needed
+        float yOffset = 1f; // Adjust the yOffset as needed
+        float coinSpacing = 20f; // Increased spacing between batches
+
+        for (int i = 0; i < numberofCoins; i++)
+        {
+            Vector3 coinBatchPosition = Vector3.zero;
+            bool foundPosition = false;
+
+            for (int attempt = 0; attempt < 100; attempt++) // Increased attempts
+            {
+                float normalizedPosition = Random.Range(0f, 1f);
+                float xPos = normalizedPosition * (_levelLength - 10) * _xMultiplier;
+
+                xPos = Mathf.Clamp(xPos, 10f, (_levelLength - 10) * _xMultiplier);
+
+                coinBatchPosition = transform.position + new Vector3(xPos, _flatY + yOffset, 0f);
+
+                // Check if there's any overlap with existing coins using raycasting
+                bool overlap = Physics2D.Raycast(coinBatchPosition, Vector2.up, yScale);
+                if (!overlap)
+                {
+                    foundPosition = true;
+                    break; // No overlap, use this position
+                }
+            }
+
+            if (!foundPosition)
+            {
+                continue; // Skip this iteration if no suitable position found
+            }
+
+            coinBatchPositions.Add(coinBatchPosition);
+
+            // Add the spacing between batches
+            if (i > 0)
+            {
+                coinBatchPosition.x += coinSpacing * _xMultiplier;
+            }
+        }
+
+        foreach (Vector3 position in coinBatchPositions)
+        {
+            GameObject coinPrefab = GetRandomCoinPrefab();
+            if (coinPrefab != null)
+            {
+                GameObject instantiatedCoin = Instantiate(coinPrefab, position, Quaternion.identity);
+                instantiatedCoin.transform.localScale = new Vector3(1f, yScale, 1.0f);
+            }
+        }
+    }
+
+    private void GenerateFuelPlacements()
+    {
         List<Vector3> prefabPositions = new List<Vector3>();
 
         float yScale = 1.25f;
@@ -79,6 +159,7 @@ public class EnvironmentGenerate : MonoBehaviour
             instantiatedPrefab.transform.localScale = new Vector3(1.25f, yScale, 1.0f);
         }
     }
+
     //WITHOUT BOX COLLIDER ADJUSTMENT
     /*private void OnValidate()
     {
@@ -135,5 +216,11 @@ public class EnvironmentGenerate : MonoBehaviour
         _boxCollider.offset = new Vector2(colliderWidth / 2f, _spriteShapeController.transform.position.y);
         }
 
+    private GameObject GetRandomCoinPrefab()
+    {
+        GameObject[] coinPrefabs = new GameObject[] { _fiveCoint, _twentyFiveCoint, _hundredCoint, _fiveHundredCoint };
+        int randomIndex = Random.Range(0, coinPrefabs.Length);
+        return coinPrefabs[randomIndex];
+    }
 
 }

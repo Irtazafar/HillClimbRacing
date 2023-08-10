@@ -7,6 +7,10 @@ TagManager:
   - Ground
   - BrakeBtnTag
   - RaceBtnTag
+  - coinOne
+  - coinTwo
+  - coinThree
+  - coinFour
   layers:
   - Default
   - TransparentFX
