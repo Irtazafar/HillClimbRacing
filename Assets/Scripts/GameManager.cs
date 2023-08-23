@@ -10,6 +10,8 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private GameObject _gameOverCanvas;
     [SerializeField] private GameObject _pauseScreen;
+    public PlayFabManager playFabManager;
+    private int _totalScore;
 
 
     private void Awake()
@@ -22,8 +24,11 @@ public class GameManager : MonoBehaviour
     }
     public void GameOver()
     {
+        _totalScore = CoinController.instance.getTotalCoinScore();
+        playFabManager.SendLeaderBoard(_totalScore);
         _gameOverCanvas.SetActive(true);
         Time.timeScale = 0f;
+        
     }
     public void RestartGame()
     {

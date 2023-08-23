@@ -10,6 +10,7 @@ public class DriverDeath : MonoBehaviour
     {
         if(collision.gameObject.CompareTag("Ground"))
         {
+            Debug.Log("TOUCHED GROUND");
             sound.Play();
             GameManager.instance.GameOver();
             //sound.Stop();

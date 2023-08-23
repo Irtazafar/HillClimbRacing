@@ -18,19 +18,19 @@ public class CoinCollect : MonoBehaviour
                 switch (coinTag)
                 {
                     case "coinOne":
-                        Debug.Log("coinOne");
+                        //Debug.Log("coinOne");
                         CoinController.instance.calculateScore(5);
                         break;
                     case "coinTwo":
-                        Debug.Log("coinTwo");
+                        //Debug.Log("coinTwo");
                         CoinController.instance.calculateScore(25);
                         break;
                     case "coinThree":
-                        Debug.Log("coinThree");
+                        //Debug.Log("coinThree");
                         CoinController.instance.calculateScore(100);
                         break;
                     case "coinFour":
-                        Debug.Log("coinFour");
+                        //Debug.Log("coinFour");
                         CoinController.instance.calculateScore(500);
                         break;
                 }

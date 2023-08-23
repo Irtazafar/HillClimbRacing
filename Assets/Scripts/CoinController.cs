@@ -13,7 +13,10 @@ public class CoinController : MonoBehaviour
 
     private int _totalCoinScore;
 
-
+    public int getTotalCoinScore()
+    {
+        return _totalCoinScore;
+    }
     private void Awake()
     {
         if (instance == null)
